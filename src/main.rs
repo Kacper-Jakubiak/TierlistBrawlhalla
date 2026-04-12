@@ -1,9 +1,10 @@
-mod reader;
+mod data_loader;
 mod images;
-mod backend;
+mod tierlist;
 pub mod downloader;
 pub mod paths;
 use std::io::{self, Write};
+use log::{error, info};
 fn print_tierlist(tierlist: &[Vec<String>]) {
     for (tier, items) in tierlist.iter().enumerate() {
         println!(
@@ -26,15 +27,15 @@ fn console_wait() {
 }
 
 fn tierlist_creator() -> Result<(), String> {
-    let data = reader::read_all().map_err(|e| e.to_string())?;
-    let legend_tierlist = backend::create_legend_tierlist(data)
-        .ok_or_else(|| "Tierlist cannot be created".to_string())?;
+    info!("Reading data from JSON files...");
+    let data = data_loader::read_all().map_err(|e| e.to_string())?;
+    let legend_tierlist = tierlist::create_legend_tierlist(data)?;
     
     match images::create_image(&legend_tierlist) {
-        Ok(()) => println!("Created tierlist image"),
+        Ok(()) => info!("Created tierlist image"),
         Err(e) => {
-            eprintln!("Warning: Failed to create image: {}", e);
-            println!("\nFallback - printing tierlist to console:");
+            error!("Failed to create image: {}", e);
+            info!("Fallback - printing tierlist to console:");
             print_tierlist(&legend_tierlist);
         }
     }
@@ -42,8 +43,12 @@ fn tierlist_creator() -> Result<(), String> {
 }
 
 fn main() {
+    env_logger::Builder::from_default_env()
+        .filter_level(log::LevelFilter::Info)
+        .init();
+    
     if let Err(e) = tierlist_creator() {
-        eprintln!("Error: {}", e);
+        error!("{}", e);
     }
     console_wait();
 }

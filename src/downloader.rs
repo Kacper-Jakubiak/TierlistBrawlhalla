@@ -4,6 +4,7 @@ use std::fs::{create_dir_all, OpenOptions};
 use std::io::{copy, Error as IoError};
 use std::path::PathBuf;
 
+use log::info;
 use reqwest::blocking::Client;
 use scraper::{Html, Selector};
 use url::Url;
@@ -94,7 +95,7 @@ impl Downloader {
                     continue;
                 }
 
-                println!("Downloading {}", file_name);
+                info!("Downloading {}", file_name);
 
                 let mut response = self.client.get(img_url).send()?;
                 let mut out_file = OpenOptions::new()

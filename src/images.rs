@@ -1,6 +1,7 @@
 use crate::downloader;
 use crate::paths;
 use image::{DynamicImage, GenericImage, RgbaImage};
+use log::{info, warn};
 use std::collections::HashMap;
 use std::fs::{create_dir_all, DirEntry};
 use std::path::PathBuf;
@@ -44,14 +45,14 @@ pub fn create_image(tierlist: &[Vec<String>]) -> Result<(), io::Error> {
 
 
     if let Err(_) = check_images(&needed_images, &images) {
-        println!("Images missing, starting download...");
+        info!("Images missing, starting download...");
         download_images().map_err(|e| {
-            println!("Download failed");
+            warn!("Download failed");
             std::io::Error::new(std::io::ErrorKind::Other, e)
         })?;
         images = load_images(&legend_path)?;
         check_images(&needed_images, &images)?;
-        println!("Download finished");
+        info!("Download finished");
     }
 
     for (tier, items) in tierlist.iter().enumerate() {
