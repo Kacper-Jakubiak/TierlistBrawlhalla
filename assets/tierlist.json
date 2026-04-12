@@ -1,26 +1,24 @@
 [
   [
-    "Greatsword",
-    "Spear"
-  ],
-  [
+    "Blasters",
     "Axe",
-    "Scythe",
-    "Sword"
-  ],
-  [
-    "Grapple Hammer",
-    "Bow"
-  ],
-  [
-    "Orb",
-    "Gauntlets",
-    "Katars",
     "Cannon"
   ],
   [
+    "Grapple Hammer",
+    "Orb",
     "Rocket Lance",
-    "Blasters",
+    "Spear",
+    "Sword"
+  ],
+  [
+    "Bow",
+    "Gauntlets",
+    "Katars"
+  ],
+  [
+    "Scythe",
+    "Greatsword",
     "Battle Boots",
     "Chakram"
   ]

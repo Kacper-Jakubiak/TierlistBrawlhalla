@@ -25,29 +25,25 @@ fn console_wait() {
     }
 }
 
-fn tierlist_creator() {
-  let data = match reader::read_all() {
-        Ok(data) => data,
-        Err(e) => {
-            println!("{}", e);
-            return;
-        }
-    };
-    let legend_tierlist = match backend::create_legend_tierlist(data) {
-      Some(tierlist) => tierlist,
-      None => {
-        println!("Tierlist cannot be created");
-        return;
-      }
-    };
+fn tierlist_creator() -> Result<(), String> {
+    let data = reader::read_all().map_err(|e| e.to_string())?;
+    let legend_tierlist = backend::create_legend_tierlist(data)
+        .ok_or_else(|| "Tierlist cannot be created".to_string())?;
+    
     match images::create_image(&legend_tierlist) {
-      Ok(()) => println!("Created tierlist image"),
-      _ => print_tierlist(&legend_tierlist),
+        Ok(()) => println!("Created tierlist image"),
+        Err(e) => {
+            eprintln!("Warning: Failed to create image: {}", e);
+            println!("\nFallback - printing tierlist to console:");
+            print_tierlist(&legend_tierlist);
+        }
     }
+    Ok(())
 }
 
 fn main() {
-    println!("{:?}", paths::get_asset_path());
-    tierlist_creator();
+    if let Err(e) = tierlist_creator() {
+        eprintln!("Error: {}", e);
+    }
     console_wait();
 }

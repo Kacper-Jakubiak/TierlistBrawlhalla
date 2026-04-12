@@ -61,10 +61,7 @@ pub fn create_image(tierlist: &[Vec<String>]) -> Result<(), io::Error> {
             let x = poz as u32 * IMG_DIM;
             let filename = normalize_name(legend);
 
-            let img = match images.get(&filename) {
-                Some(img) => img,
-                None => unreachable!()
-            };
+            let img = images.get(&filename).ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, format!("Image not found after download: {}", filename)))?;
 
             grid_image.copy_from(&img.to_rgba8(), x, y).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
         }
