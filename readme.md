@@ -4,7 +4,7 @@ A Rust application that generates a Brawlhalla legend tierlist as an image.
 
 ## Overview
 
-This tool reads legend data from JSON files and creates a visual tierlist image ranking Brawlhalla legends by tier (S, A, B, C, etc.). If image creation fails, it falls back to displaying the tierlist in the console.
+App reads data from JSON files and creates a visual tierlist image ranking Brawlhalla legends by tier (S, A, B, C). If image creation fails, it falls back to displaying the tierlist in the console.
 
 ## Prerequisites
 
